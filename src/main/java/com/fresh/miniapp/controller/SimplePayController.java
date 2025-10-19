@@ -33,7 +33,6 @@ public class SimplePayController {
             Integer amount = (Integer) request.get("amount"); // 金额（分）
             String description = (String) request.get("description"); // 商品描述
             String openid = (String) request.get("openid"); // 用户openid
-            
             // 参数校验
             if (amount == null || amount <= 0) {
                 result.put("success", false);

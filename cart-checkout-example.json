@@ -1,0 +1,44 @@
+{
+  "userId": 1,
+  "address": "北京市北京市朝阳区三里屯SOHO 1号楼1单元101室，张三，13800138001",
+  "cart": [
+    {
+      "product": {
+        "id": 1,
+        "name": "新鲜苹果",
+        "description": "红富士苹果，香甜可口",
+        "price": 1280,
+        "image": "https://example.com/images/apple.jpg",
+        "categoryId": 1
+      },
+      "quantity": 2,
+      "price": 1280
+    },
+    {
+      "product": {
+        "id": 2,
+        "name": "有机香蕉",
+        "description": "进口有机香蕉，营养丰富",
+        "price": 850,
+        "image": "https://example.com/images/banana.jpg",
+        "categoryId": 1
+      },
+      "quantity": 3,
+      "price": 850
+    },
+    {
+      "product": {
+        "id": 3,
+        "name": "新鲜橙子",
+        "description": "赣南脐橙，汁多味甜",
+        "price": 1500,
+        "image": "https://example.com/images/orange.jpg",
+        "categoryId": 1
+      },
+      "quantity": 1,
+      "price": 1500
+    }
+  ],
+  "totalPrice": 6610,
+  "remark": "请尽快配送，谢谢！"
+}

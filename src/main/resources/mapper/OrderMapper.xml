@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fresh.core.mapper.OrderMapper">
+    
+    <select id="selectOrderPage" resultType="com.fresh.core.entity.Order">
+        SELECT o.*, a.receiver_name, a.receiver_phone, 
+               CONCAT(a.province, a.city, a.district, a.detail_address) as full_address
+        FROM orders o
+        LEFT JOIN addresses a ON o.address_id = a.id
+        WHERE 1=1
+        <if test="userId != null">
+            AND o.user_id = #{userId}
+        </if>
+        <if test="status != null">
+            AND o.status = #{status}
+        </if>
+        ORDER BY o.create_time DESC
+    </select>
+    
+    <select id="selectOrderDetail" resultType="com.fresh.core.entity.Order">
+        SELECT o.*, a.receiver_name, a.receiver_phone, 
+               CONCAT(a.province, a.city, a.district, a.detail_address) as full_address
+        FROM orders o
+        LEFT JOIN addresses a ON o.address_id = a.id
+        WHERE o.id = #{id}
+    </select>
+    
+    <select id="selectByOrderNo" resultType="com.fresh.core.entity.Order">
+        SELECT * FROM orders WHERE order_no = #{orderNo}
+    </select>
+    
+    <update id="updatePaymentInfo">
+        UPDATE orders 
+        SET wechat_order_no = #{wechatOrderNo},
+            wechat_prepay_id = #{wechatPrepayId},
+            update_time = NOW()
+        WHERE id = #{id}
+    </update>
+    
+    <update id="updatePaymentStatus">
+        UPDATE orders 
+        SET payment_status = #{paymentStatus},
+            payment_time = #{paymentTime},
+            wechat_order_no = #{wechatOrderNo},
+            status = #{status},
+            update_time = NOW()
+        WHERE id = #{id}
+    </update>
+    
+</mapper>

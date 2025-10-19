@@ -1,0 +1,60 @@
+server:
+  port: 8081
+  servlet:
+    context-path: /api
+
+spring:
+  profiles:
+    active: dev
+    include: wechat-pay
+  application:
+    name: fresh-delivery
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/fresh_delivery?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+    druid:
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      max-wait: 60000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      filters: stat,wall
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  type-aliases-package: com.fresh.core.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+  global-config:
+    db-config:
+      id-type: auto
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+# 微信小程序配置（用于手机号授权登录）
+wechat:
+  miniapp:
+    appid: wx821aa5f4890b50df
+    secret: f6c0a4d17da85f8a4a45dd3bdffdb6e9
+  # 微信支付配置
+  pay:
+    appid: wx821aa5f4890b50df  # 小程序APPID
+    mchid: 1234567890          # 商户号（需要替换为真实商户号）
+    private-key-path: classpath:cert/apiclient_key.pem  # 商户私钥文件路径
+    merchant-serial-number: 1234567890ABCDEF1234567890ABCDEF12345678  # 商户证书序列号
+    api-v3-key: your_api_v3_key_32_characters_long  # APIv3密钥
+    notify-url: https://your-domain.com/api/wechat/pay/notify  # 支付结果通知地址
+    refund-notify-url: https://your-domain.com/api/wechat/pay/refund/notify  # 退款结果通知地址

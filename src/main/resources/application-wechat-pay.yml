@@ -1,0 +1,47 @@
+# 微信支付配置
+wechat:
+  pay:
+    # 应用ID
+    appid: ${WECHAT_APP_ID:your_app_id}
+    # 商户号
+    mchid: ${WECHAT_MCH_ID:your_mch_id}
+    # 商户证书序列号
+    merchant-serial-number: ${WECHAT_MCH_SERIAL_NO:your_mch_serial_no}
+    # APIv3密钥
+    api-v3-key: ${WECHAT_API_V3_KEY:your_api_v3_key}
+    # 商户私钥文件路径
+    private-key-path: ${WECHAT_PRIVATE_KEY_PATH:cert/apiclient_key.pem}
+    # 支付回调通知URL
+    notify-url: ${WECHAT_NOTIFY_URL:https://your-domain.com/api/wechat/pay/notify}
+    # 退款回调通知URL
+    refund-notify-url: ${WECHAT_REFUND_NOTIFY_URL:https://your-domain.com/api/wechat/pay/refund-notify}
+    # API版本
+    api-version: v3
+    # 签名类型
+    sign-type: RSA
+    # 请求超时时间（毫秒）
+    timeout: 30000
+    # 是否启用沙箱环境
+    sandbox: ${WECHAT_SANDBOX:false}
+    # 沙箱环境API地址
+    sandbox-url: https://api.mch.weixin.qq.com/sandboxnew
+    # 生产环境API地址
+    production-url: https://api.mch.weixin.qq.com
+
+# 开发环境配置
+---
+spring:
+  profiles: dev
+wechat:
+  pay:
+    sandbox: true
+    notify-url: http://localhost:8080/api/wechat/pay/notify
+    refund-notify-url: http://localhost:8080/api/wechat/pay/refund-notify
+
+# 生产环境配置
+---
+spring:
+  profiles: prod
+wechat:
+  pay:
+    sandbox: false

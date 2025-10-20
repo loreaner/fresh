@@ -2,9 +2,9 @@
 wechat:
   pay:
     # 应用ID
-    appid: ${WECHAT_APP_ID:your_app_id}
+    appid: ${WECHAT_APP_ID:wxa1d7600df75f4fa9}
     # 商户号
-    mchid: ${WECHAT_MCH_ID:your_mch_id}
+    mchid: ${WECHAT_MCH_ID:1729909939}
     # 商户证书序列号
     merchant-serial-number: ${WECHAT_MCH_SERIAL_NO:your_mch_serial_no}
     # APIv3密钥

@@ -3,6 +3,7 @@ package com.fresh.miniapp.controller;
 import com.fresh.core.service.WechatPayService;
 import com.fresh.miniapp.dto.WechatPayRequest;
 import com.fresh.miniapp.dto.WechatPayResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -15,6 +16,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/simple/pay")
+@Slf4j
 public class SimplePayController {
 
     @Resource
@@ -59,7 +61,7 @@ public class SimplePayController {
             payRequest.setDescription(description);
             payRequest.setAmount(amount);
             payRequest.setOpenid(openid);
-            
+            log.info("创建支付订单");
             // 创建支付订单
             WechatPayResponse payResponse = wechatPayService.createPayOrder(payRequest);
             

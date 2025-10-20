@@ -71,7 +71,7 @@ public class WechatPayConfig {
             // 验证必要的配置参数
             if (!isConfigValid()) {
                 log.warn("微信支付配置不完整，跳过初始化");
-                return null;
+                throw new IllegalStateException("微信支付配置不完整");
             }
             
             // 读取商户私钥
@@ -86,7 +86,7 @@ public class WechatPayConfig {
                     .build();
         } catch (Exception e) {
             log.error("微信支付配置初始化失败: {}", e.getMessage());
-            return null;
+            throw new IllegalStateException("微信支付配置初始化失败: " + e.getMessage(), e);
         }
     }
 

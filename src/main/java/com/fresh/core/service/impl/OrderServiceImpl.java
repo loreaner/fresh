@@ -15,6 +15,10 @@ import com.fresh.miniapp.dto.Cart;
 import com.fresh.miniapp.dto.OrderCreateRequest;
 import com.fresh.miniapp.dto.CartCheckoutRequest;
 import com.fresh.miniapp.dto.PayPrepareResponse;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.fresh.admin.dto.AdminOrderDetailDto;
+import com.fresh.admin.dto.ProductDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +30,7 @@ import java.util.List;
 import java.util.Random;
 
 
-
+@Slf4j
 @Service
 public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements OrderService {
 
@@ -100,11 +104,11 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
         for (Cart cartItem :request.getCarts()) {
             OrderItem orderItem = new OrderItem();
-            orderItem.setProductId(1);
             orderItem.setProductName(cartItem.getProduct().getName());
             orderItem.setProductImage(cartItem.getProduct().getImage());
             orderItem.setPrice(cartItem.getProduct().getPrice());
             orderItem.setQuantity(cartItem.getQuantity());
+            orderItem.setPhone(request.getPhone());
             orderItems.add(orderItem);
         }
         System.out.println(order);
@@ -112,6 +116,12 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         boolean saved = save(order);
         if (!saved ) {
             throw new RuntimeException("订单创建失败");
+        }
+        // 4. 保存订单项
+        for (OrderItem orderItem : orderItems) {
+            orderItem.setOrderNo(order.getOrderNo());
+            orderItemMapper.insert(orderItem);
+            log.info("保存订单项：{}", orderItem);
         }
 
 
@@ -164,5 +174,46 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         String timeStr = now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
         String randomStr = String.format("%04d", new Random().nextInt(10000));
         return timeStr + randomStr;
+    }
+
+    @Override
+    public AdminOrderDetailDto getAdminOrderDetailByOrderNo(String orderNo) {
+        Order order = getOne(new QueryWrapper<Order>().eq("order_no", orderNo));
+        if (order == null) {
+            return null;
+        }
+
+        List<OrderItem> orderItems = orderItemMapper.selectList(new QueryWrapper<OrderItem>().eq("order_no", order.getOrderNo()));
+
+        AdminOrderDetailDto adminOrderDetailDto = new AdminOrderDetailDto();
+        adminOrderDetailDto.setReceiver_name(order.getReceiver_name()); // Assuming receiver name is in address
+        adminOrderDetailDto.setPhone(order.getPhone());
+        adminOrderDetailDto.setAddress(order.getReceiverAddress());
+        adminOrderDetailDto.setTotalPrice(order.getTotalPrice());
+
+        List<ProductDto> productDtos = new ArrayList<>();
+        for (OrderItem orderItem : orderItems) {
+            ProductDto productDto = new ProductDto();
+            productDto.setProductName(orderItem.getProductName());
+            productDto.setPrice(orderItem.getPrice());
+            productDto.setQuantity(orderItem.getQuantity());
+            productDtos.add(productDto);
+        }
+        adminOrderDetailDto.setProducts(productDtos);
+
+        return adminOrderDetailDto;
+    }
+
+    @Override
+    public List<AdminOrderDetailDto> getAllAdminOrderDetails() {
+        List<Order> orders = list();
+        List<AdminOrderDetailDto> orderDetails = new ArrayList<>();
+        for (Order order : orders) {
+            AdminOrderDetailDto orderDetail = getAdminOrderDetailByOrderNo(order.getOrderNo());
+            if (orderDetail != null) {
+                orderDetails.add(orderDetail);
+            }
+        }
+        return orderDetails;
     }
 }

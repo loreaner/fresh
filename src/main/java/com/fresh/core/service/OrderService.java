@@ -7,6 +7,7 @@ import com.fresh.core.entity.OrderItem;
 import com.fresh.miniapp.dto.OrderCreateRequest;
 import com.fresh.miniapp.dto.CartCheckoutRequest;
 import com.fresh.miniapp.dto.PayPrepareResponse;
+import com.fresh.admin.dto.AdminOrderDetailDto;
 
 import java.util.List;
 
@@ -78,4 +79,13 @@ public interface OrderService extends IService<Order> {
      * @return 是否成功
      */
     boolean updateStatusAfterPay(Long orderId);
+    
+    /**
+     * 管理端根据订单号获取订单详情
+     * @param orderNo 订单号
+     * @return 订单详情
+     */
+    AdminOrderDetailDto getAdminOrderDetailByOrderNo(String orderNo);
+
+    List<AdminOrderDetailDto> getAllAdminOrderDetails();
 }

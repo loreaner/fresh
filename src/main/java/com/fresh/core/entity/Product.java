@@ -12,7 +12,7 @@ public class Product extends BaseEntity {
     private Long categoryId;
     private String name;
     private String description;
-    private BigDecimal price;
+    private int price;
     private Integer stock;
     private String image;
     private Integer status;

@@ -17,7 +17,7 @@ public class Order extends BaseEntity {
     private Integer totalPrice;
     private Integer status;
     private LocalDateTime paymentTime;
-    private String name;
+    private String receiver_name;
     private String receiverAddress;
     private LocalDateTime deliveryTime;
     private LocalDateTime finishTime;

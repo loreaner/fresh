@@ -20,6 +20,7 @@ import com.fresh.miniapp.vo.UserVO;
 import com.fresh.miniapp.service.WechatMiniappService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -137,21 +138,9 @@ public class UserController {
      * 获取用户积分信息
      */
     @GetMapping("/points")
-    public Result<UserPoints> getUserPoints(String phone) {
+    public Result<UserPoints> getUserPoints(@RequestParam String phone) {
         UserPoints userPoints = userPointsService.getUserPoints(phone);
-        if (userPoints == null) {
-            return Result.error("用户积分信息不存在");
-        }
         return Result.success(userPoints);
-    }
-
-    /**
-     * 更新用户积分信息
-     */
-    @PutMapping("/points/update")
-    public Result<Void> updateUserPoints(@RequestBody UserPointsUpdateRequest request) {
-        boolean success = userPointsService.updateUserPoints(request);
-        return success ? Result.success() : Result.error("更新失败");
     }
 
     /**
@@ -176,6 +165,15 @@ public class UserController {
         } catch (Exception e) {
             return Result.error("积分兑换失败：" + e.getMessage());
         }
+    }
+
+    /**
+     * 更新用户积分信息
+     */
+    @PutMapping("/points/update")
+    public Result<Void> updateUserPoints(@RequestBody UserPointsUpdateRequest request) {
+        boolean success = userPointsService.updateUserPoints(request);
+        return success ? Result.success() : Result.error("更新失败");
     }
 
     /**

@@ -5,9 +5,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
 @TableName("user_points")
-public class UserPoints extends BaseEntity {
+public class UserPoints  {
     private Long userId;
     private String phone;
     private Integer totalPoints;

@@ -7,6 +7,7 @@ import com.fresh.core.entity.PointRecord;
 import com.fresh.core.mapper.UserPointsMapper;
 import com.fresh.core.mapper.PointRecordMapper;
 import com.fresh.core.service.UserPointsService;
+import com.fresh.miniapp.dto.UserPointsUpdateRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,13 +22,11 @@ public class UserPointsServiceImpl extends ServiceImpl<UserPointsMapper, UserPoi
 
     @Resource
     private PointRecordMapper pointRecordMapper;
-
     @Override
     public UserPoints getUserPoints(String phone) {
         LambdaQueryWrapper<UserPoints> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(UserPoints::getPhone, phone);
         UserPoints userPoints = getOne(wrapper);
-        
         // 如果用户积分记录不存在，则初始化
         if (userPoints == null) {
             initUserPoints(phone);
@@ -56,8 +55,6 @@ public class UserPointsServiceImpl extends ServiceImpl<UserPointsMapper, UserPoi
         userPoints.setAvailablePoints(0);
         userPoints.setUsedPoints(0);
         userPoints.setExpiredPoints(0);
-        userPoints.setCreateTime(LocalDateTime.now());
-        userPoints.setUpdateTime(LocalDateTime.now());
         
         return save(userPoints);
     }
@@ -78,7 +75,6 @@ public class UserPointsServiceImpl extends ServiceImpl<UserPointsMapper, UserPoi
         // 更新积分
         userPoints.setTotalPoints(userPoints.getTotalPoints() + points);
         userPoints.setAvailablePoints(userPoints.getAvailablePoints() + points);
-        userPoints.setUpdateTime(LocalDateTime.now());
         
         boolean updateSuccess = updateById(userPoints);
         return updateSuccess;
@@ -98,15 +94,20 @@ public class UserPointsServiceImpl extends ServiceImpl<UserPointsMapper, UserPoi
 
     @Override
     @Transactional
-    public boolean updateUserPoints(com.fresh.miniapp.dto.UserPointsUpdateRequest request) {
+    public boolean updateUserPoints(UserPointsUpdateRequest request) {
+        // Get or initialize user points.
         UserPoints userPoints = getUserPoints(request.getPhone());
         if (userPoints == null) {
             return false;
         }
 
-        org.springframework.beans.BeanUtils.copyProperties(request, userPoints);
-        userPoints.setUpdateTime(java.time.LocalDateTime.now());
+        // Use a partial update to only update the intended field.
+        UserPoints pointsUpdate = new UserPoints();
+        pointsUpdate.setAvailablePoints(request.getAvailablePoints());
 
-        return updateById(userPoints);
+        LambdaQueryWrapper<UserPoints> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(UserPoints::getPhone, request.getPhone());
+
+        return update(pointsUpdate, wrapper);
     }
 }

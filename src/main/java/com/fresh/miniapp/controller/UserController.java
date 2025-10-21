@@ -135,7 +135,7 @@ public class UserController {
     /**
      * 获取用户积分信息
      */
-    @GetMapping("/points/{userId}")
+    @GetMapping("/points/")
     public Result<UserPoints> getUserPoints(String phone) {
         UserPoints userPoints = userPointsService.getUserPoints(phone);
         if (userPoints == null) {

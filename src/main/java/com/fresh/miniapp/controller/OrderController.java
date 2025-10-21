@@ -80,12 +80,12 @@ public class OrderController {
     }
 
     @PostMapping("/create")
-    public Result<Long> createOrder(@RequestBody  OrderCreateRequest request) {
+    public Result<String> createOrder(@RequestBody  OrderCreateRequest request) {
        boolean a = orderService.createOrder(request);
         if (a == false) {
             return Result.error("订单创建失败");
         }
-        return Result.success();
+        return Result.success("创建成功");
     }
 
     /**

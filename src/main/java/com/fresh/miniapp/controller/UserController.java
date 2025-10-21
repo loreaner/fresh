@@ -15,6 +15,7 @@ import com.fresh.miniapp.dto.PointExchangeRequest;
 import com.fresh.miniapp.dto.AddPointsRequest;
 import com.fresh.miniapp.dto.PhoneCodeRequest;
 import com.fresh.miniapp.dto.DecryptPhoneRequest;
+import com.fresh.miniapp.dto.UserPointsUpdateRequest;
 import com.fresh.miniapp.vo.UserVO;
 import com.fresh.miniapp.service.WechatMiniappService;
 import lombok.extern.slf4j.Slf4j;
@@ -135,13 +136,22 @@ public class UserController {
     /**
      * 获取用户积分信息
      */
-    @GetMapping("/points/")
+    @GetMapping("/points")
     public Result<UserPoints> getUserPoints(String phone) {
         UserPoints userPoints = userPointsService.getUserPoints(phone);
         if (userPoints == null) {
             return Result.error("用户积分信息不存在");
         }
         return Result.success(userPoints);
+    }
+
+    /**
+     * 更新用户积分信息
+     */
+    @PutMapping("/points/update")
+    public Result<Void> updateUserPoints(@RequestBody UserPointsUpdateRequest request) {
+        boolean success = userPointsService.updateUserPoints(request);
+        return success ? Result.success() : Result.error("更新失败");
     }
 
     /**

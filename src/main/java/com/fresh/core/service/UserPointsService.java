@@ -44,4 +44,11 @@ public interface UserPointsService extends IService<UserPoints> {
      * @return 是否足够
      */
     boolean hasEnoughPoints(String phone, Integer points);
+    
+    /**
+     * 更新用户积分信息
+     * @param request 更新请求
+     * @return 是否成功
+     */
+    boolean updateUserPoints(com.fresh.miniapp.dto.UserPointsUpdateRequest request);
 }

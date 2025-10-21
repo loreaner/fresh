@@ -95,4 +95,18 @@ public class UserPointsServiceImpl extends ServiceImpl<UserPointsMapper, UserPoi
         UserPoints userPoints = getUserPoints(phone);
         return userPoints != null && userPoints.getAvailablePoints() >= points;
     }
+
+    @Override
+    @Transactional
+    public boolean updateUserPoints(com.fresh.miniapp.dto.UserPointsUpdateRequest request) {
+        UserPoints userPoints = getUserPoints(request.getPhone());
+        if (userPoints == null) {
+            return false;
+        }
+
+        org.springframework.beans.BeanUtils.copyProperties(request, userPoints);
+        userPoints.setUpdateTime(java.time.LocalDateTime.now());
+
+        return updateById(userPoints);
+    }
 }

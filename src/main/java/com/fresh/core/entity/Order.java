@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.fresh.miniapp.dto.Cart;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import java.math.BigDecimal;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,7 +14,6 @@ import java.util.List;
 public class Order extends BaseEntity {
     private String phone;
     private String orderNo;
-    private List<Cart> carts;
     private Integer totalPrice;
     private Integer status;
     private LocalDateTime paymentTime;

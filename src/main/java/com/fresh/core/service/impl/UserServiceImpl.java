@@ -77,4 +77,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         wrapper.eq("wechat_code", wechatCode);
         return getOne(wrapper);
     }
+
+    @Override
+    public User getUserByPhone(String phone) {
+        if (phone == null || phone.isEmpty()) {
+            return null;
+        }
+        
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        wrapper.eq("phone", phone);
+        return getOne(wrapper);
+    }
 }

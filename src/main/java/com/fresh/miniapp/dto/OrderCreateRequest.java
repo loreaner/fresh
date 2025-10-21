@@ -1,12 +1,11 @@
 package com.fresh.miniapp.dto;
 
-import com.fresh.core.entity.Product;
 import lombok.Data;
-import java.io.Serializable;
+
 import java.util.List;
 
 @Data
-public class OrderCreateRequest implements Serializable {
+public class OrderCreateRequest {
     private String phone;
     private String address;
     private String remark;

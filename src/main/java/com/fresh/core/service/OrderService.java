@@ -56,7 +56,7 @@ public interface OrderService extends IService<Order> {
      * @param request 创建订单请求
      * @return 订单ID
      */
-     boolean createOrder(OrderCreateRequest request);
+     boolean createOrder(OrderCreateRequest order);
 
     /**
      * 从购物车创建订单

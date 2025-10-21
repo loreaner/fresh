@@ -2,32 +2,30 @@ package com.fresh.core.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.fresh.core.entity.Address;
 import com.fresh.core.entity.Order;
 import com.fresh.core.entity.OrderItem;
-import com.fresh.core.entity.Product;
 import com.fresh.core.enums.OrderStatus;
 import com.fresh.core.mapper.OrderItemMapper;
 import com.fresh.core.mapper.OrderMapper;
 import com.fresh.core.service.AddressService;
-import com.fresh.core.service.CartService;
 import com.fresh.core.service.OrderService;
 import com.fresh.core.service.ProductService;
+import com.fresh.core.service.UserService; // 引入UserService
 import com.fresh.miniapp.dto.Cart;
 import com.fresh.miniapp.dto.OrderCreateRequest;
 import com.fresh.miniapp.dto.CartCheckoutRequest;
-import com.fresh.miniapp.dto.OrderItemRequest;
 import com.fresh.miniapp.dto.PayPrepareResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+
 
 @Service
 public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements OrderService {
@@ -38,11 +36,12 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     @Resource
     private AddressService addressService;
 
-    @Resource
-    private CartService cartService;
+    
 
     @Resource
     private OrderItemMapper orderItemMapper;
+    @Resource
+    private UserService userService; // 注入UserService
 
     @Override
     public Page<Order> getOrderPage(Integer pageNum, Integer pageSize, Long userId, Integer status) {
@@ -88,24 +87,35 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
                 || request.getCarts() == null || request.getCarts().isEmpty()) {
             return false;
         }
-
-
-
-        // 创建订单
         Order order = new Order();
-        order.setRemark(request.getRemark());
+        // 1. 设置订单号和状态
         order.setOrderNo(generateOrderNo());
+        order.setStatus(OrderStatus.PENDING_PAYMENT.getCode()); // 待支付
+        order.setReceiverAddress(request.getAddress()) ;
+        order.setPhone(request.getPhone());
         order.setTotalPrice(request.getTotalPrice());
-        order.setCarts(request.getCarts());
-        order.setPaymentTime(LocalDateTime.now());
 
+        // 2. 创建订单项
+        List<OrderItem> orderItems = new ArrayList<>();
+
+        for (Cart cartItem :request.getCarts()) {
+            OrderItem orderItem = new OrderItem();
+            orderItem.setProductId(1);
+            orderItem.setProductName(cartItem.getProduct().getName());
+            orderItem.setProductImage(cartItem.getProduct().getImage());
+            orderItem.setPrice(cartItem.getProduct().getPrice());
+            orderItem.setQuantity(cartItem.getQuantity());
+            orderItems.add(orderItem);
+        }
+        System.out.println(order);
+        // 3. 保存订单
         boolean saved = save(order);
-        if (!saved || order.getId() == null) {
+        if (!saved ) {
             throw new RuntimeException("订单创建失败");
         }
 
 
-        return saved;
+        return true;
     }
 
     @Override

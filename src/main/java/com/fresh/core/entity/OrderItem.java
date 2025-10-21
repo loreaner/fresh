@@ -9,8 +9,8 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(callSuper = true)
 @TableName("order_items")
 public class OrderItem extends BaseEntity {
-    private Long orderId;
-    private Long productId;
+    private int orderId;
+    private int productId;
     private String productName;
     private String productImage;
     private BigDecimal price;

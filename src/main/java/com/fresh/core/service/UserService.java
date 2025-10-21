@@ -36,4 +36,11 @@ public interface UserService extends IService<User> {
      * @return 用户信息
      */
     User getUserByWechatCode(String wechatCode);
+
+    /**
+     * 根据手机号查找用户
+     * @param phone 手机号
+     * @return 用户信息
+     */
+    User getUserByPhone(String phone);
 }

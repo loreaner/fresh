@@ -16,6 +16,18 @@ CREATE DATABASE /*!32312 IF NOT EXISTS*/`fresh_delivery` /*!40100 DEFAULT CHARAC
 
 USE `fresh_delivery`;
 
+/*Table structure for table `aaa` */
+
+DROP TABLE IF EXISTS `aaa`;
+
+CREATE TABLE `aaa` (
+  `id` int DEFAULT NULL,
+  `shopinfo` varchar(5000) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `shopaddress` varchar(5000) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+/*Data for the table `aaa` */
+
 /*Table structure for table `addresses` */
 
 DROP TABLE IF EXISTS `addresses`;
@@ -147,19 +159,22 @@ DROP TABLE IF EXISTS `order_items`;
 
 CREATE TABLE `order_items` (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `order_id` bigint NOT NULL COMMENT '订单ID',
-  `product_id` bigint NOT NULL COMMENT '商品ID',
+  `order_no` varchar(20) DEFAULT NULL COMMENT '订单ID',
+  `product_id` bigint DEFAULT NULL COMMENT '商品ID',
   `product_name` varchar(100) NOT NULL COMMENT '商品名称',
   `product_image` varchar(255) DEFAULT NULL COMMENT '商品图片',
   `price` decimal(10,2) NOT NULL COMMENT '商品价格',
   `quantity` int NOT NULL COMMENT '数量',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `phone` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `idx_order_id` (`order_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='订单项表';
+  KEY `idx_order_id` (`order_no`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='订单项表';
 
 /*Data for the table `order_items` */
+
+insert  into `order_items`(`id`,`order_no`,`product_id`,`product_name`,`product_image`,`price`,`quantity`,`create_time`,`update_time`,`phone`) values (1,'202510220002177920',0,'string','string','0.00',0,'2025-10-22 00:02:17','2025-10-22 00:02:17','string');
 
 /*Table structure for table `orders` */
 
@@ -186,11 +201,11 @@ CREATE TABLE `orders` (
   KEY `idx_user_id` (`user_id`),
   KEY `idx_status` (`status`),
   KEY `idx_create_time` (`create_time`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='订单表';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='订单表';
 
 /*Data for the table `orders` */
 
-insert  into `orders`(`id`,`user_id`,`order_no`,`total_price`,`status`,`payment_time`,`receiver_name`,`phone`,`receiver_address`,`delivery_man_id`,`delivery_time`,`finish_time`,`remark`,`create_time`,`update_time`) values (1,NULL,'202510211551479662','0.00',1,NULL,NULL,'string','string',NULL,NULL,NULL,NULL,'2025-10-21 15:51:47','2025-10-21 15:51:47');
+insert  into `orders`(`id`,`user_id`,`order_no`,`total_price`,`status`,`payment_time`,`receiver_name`,`phone`,`receiver_address`,`delivery_man_id`,`delivery_time`,`finish_time`,`remark`,`create_time`,`update_time`) values (1,NULL,'202510211551479662','0.00',1,NULL,'aa','aaaaa','string',NULL,NULL,NULL,NULL,'2025-10-21 15:51:47','2025-10-22 01:53:45'),(3,NULL,'202510220002177920','0.00',5,NULL,NULL,'string','string',NULL,NULL,NULL,NULL,'2025-10-22 00:02:17','2025-10-22 02:07:14');
 
 /*Table structure for table `point_exchange` */
 
@@ -291,20 +306,19 @@ DROP TABLE IF EXISTS `user_points`;
 
 CREATE TABLE `user_points` (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `user_id` bigint NOT NULL COMMENT '用户ID',
-  `total_points` int NOT NULL DEFAULT '0' COMMENT '总积分',
-  `available_points` int NOT NULL DEFAULT '0' COMMENT '可用积分',
-  `used_points` int NOT NULL DEFAULT '0' COMMENT '已使用积分',
-  `expired_points` int NOT NULL DEFAULT '0' COMMENT '已过期积分',
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `user_id` bigint DEFAULT NULL COMMENT '用户ID',
+  `total_points` int DEFAULT '0' COMMENT '总积分',
+  `available_points` int DEFAULT '0' COMMENT '可用积分',
+  `used_points` int DEFAULT '0' COMMENT '已使用积分',
+  `expired_points` int DEFAULT '0' COMMENT '已过期积分',
+  `phone` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户积分表';
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户积分表';
 
 /*Data for the table `user_points` */
 
-insert  into `user_points`(`id`,`user_id`,`total_points`,`available_points`,`used_points`,`expired_points`,`create_time`,`update_time`) values (1,1,100,94,6,0,'2024-01-01 10:00:00','2024-01-01 10:00:00'),(2,2,50,48,2,0,'2024-01-01 10:00:00','2024-01-01 10:00:00'),(3,3,20,20,0,0,'2024-01-01 10:00:00','2024-01-01 10:00:00');
+insert  into `user_points`(`id`,`user_id`,`total_points`,`available_points`,`used_points`,`expired_points`,`phone`) values (1,1,100,94,6,0,NULL),(2,2,50,48,2,0,NULL),(3,3,20,20,0,0,NULL),(4,NULL,0,800,0,0,'123456'),(5,NULL,0,0,0,0,NULL),(6,NULL,0,0,0,0,NULL),(7,NULL,0,0,0,0,NULL);
 
 /*Table structure for table `users` */
 

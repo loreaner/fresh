@@ -4,5 +4,6 @@ import lombok.Data;
 
 @Data
 public class DeleteAddressRequest {
-    private Long id;
+    private String phone;
+    private String detailAddress;
 }

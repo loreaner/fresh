@@ -10,6 +10,6 @@ public interface AddressService extends IService<Address> {
     List<Address> getUserAddresses(String phone);
     boolean addAddress(Address address);
     boolean updateAddress(Address address);
-    boolean deleteAddress(Long id);
+    boolean deleteAddress(String phone, String detailAddress);
     boolean setDefaultAddress(Long userId, Long addressId);
 }

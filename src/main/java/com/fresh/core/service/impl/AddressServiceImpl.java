@@ -1,6 +1,7 @@
 package com.fresh.core.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fresh.core.entity.Address;
 import com.fresh.core.mapper.AddressMapper;
@@ -42,8 +43,8 @@ public class AddressServiceImpl extends ServiceImpl<AddressMapper, Address> impl
     }
 
     @Override
-    public boolean deleteAddress(Long id) {
-        return removeById(id);
+    public boolean deleteAddress(String phone, String detailAddress) {
+        return remove(new QueryWrapper<Address>().eq("receiver_phone", phone).eq("detail_address", detailAddress));
     }
 
     @Override

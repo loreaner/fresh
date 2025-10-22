@@ -36,19 +36,6 @@ public class DeliveryManController {
         
         return Result.success(PageResult.of(page.getTotal(), voList));
     }
-
-    @GetMapping("/detail/{id}")
-    public Result<DeliveryManVO> getDeliveryManDetail(@PathVariable Long id) {
-        DeliveryMan deliveryMan = deliveryManService.getDeliveryManDetail(id);
-        if (deliveryMan == null) {
-            return Result.error("配送员不存在");
-        }
-        
-        DeliveryManVO vo = new DeliveryManVO();
-        BeanUtils.copyProperties(deliveryMan, vo);
-        return Result.success(vo);
-    }
-
     @PostMapping("/add")
     public Result<Void> addDeliveryMan(@RequestBody DeliveryManRequest request) {
         DeliveryMan deliveryMan = new DeliveryMan();

@@ -59,12 +59,10 @@ public class UserController {
         if (user == null) {
             return Result.error("用户不存在");
         }
-        
         UserVO vo = new UserVO();
         BeanUtils.copyProperties(user, vo);
         return Result.success(vo);
     }
-
     /**
      * 通过微信返回的code获取用户手机号（新接口）
      */
@@ -74,9 +72,9 @@ public class UserController {
             if (request == null || request.getCode() == null || request.getCode().isEmpty()) {
                 return Result.error("缺少code参数");
             }
-            
             log.info("收到手机号获取请求，code: {}", request.getCode());
             java.util.Map<String, Object> phoneInfo = wechatMiniappService.getPhoneNumberByCode(request.getCode());
+
             log.info("手机号获取成功: {}", phoneInfo);
             return Result.success(phoneInfo);
         } catch (Exception e) {
@@ -175,7 +173,6 @@ public class UserController {
         boolean success = userPointsService.updateUserPoints(request);
         return success ? Result.success() : Result.error("更新失败");
     }
-
     /**
      * 微信登录/注册
      */

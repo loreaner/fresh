@@ -57,10 +57,8 @@ public class AddressController {
         if (request.getUserId() == null) {
             return Result.error("地址ID不能为空");
         }
-        
         Address address = new Address();
         BeanUtils.copyProperties(request, address);
-        
         boolean success = addressService.updateAddress(address);
         return success ? Result.success() : Result.error("更新失败");
     }
@@ -70,7 +68,7 @@ public class AddressController {
      */
     @PostMapping("/delete")
     public Result<Void> deleteAddress(@RequestBody DeleteAddressRequest request) {
-        boolean success = addressService.deleteAddress(request.getId());
+        boolean success = addressService.deleteAddress(request.getPhone(), request.getDetailAddress());
         return success ? Result.success() : Result.error("删除失败");
     }
 

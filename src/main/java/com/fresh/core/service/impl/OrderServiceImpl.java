@@ -1,5 +1,6 @@
 package com.fresh.core.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fresh.core.entity.Order;
@@ -15,7 +16,7 @@ import com.fresh.miniapp.dto.Cart;
 import com.fresh.miniapp.dto.OrderCreateRequest;
 import com.fresh.miniapp.dto.CartCheckoutRequest;
 import com.fresh.miniapp.dto.PayPrepareResponse;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.fresh.admin.dto.AdminOrderDetailDto;
 import com.fresh.admin.dto.ProductDto;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -147,21 +149,22 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         return resp;
     }
 
+
+
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean updateStatusAfterPay(Long orderId) {
-        Order order = getById(orderId);
-        if (order == null) {
-            return false;
-        }
-        
-        if (!OrderStatus.canTransferTo(order.getStatus(), 1)) {
-            return false;
-        }
-        
-        order.setStatus(1);
-        order.setUpdateTime(LocalDateTime.now());
-        return updateById(order);
+    public boolean updateStatusAfterPay(String phone, BigDecimal orderNo, Integer status) {
+        UpdateWrapper<Order> updateWrapper = new UpdateWrapper<>();
+        // 设置更新条件
+        updateWrapper.eq("phone", phone)
+                .eq("order_no", orderNo);
+        // 设置要更新的字段和值
+        updateWrapper.set("status", status);
+        // 如果需要同时更新其他字段，例如更新时间
+        // updateWrapper.set("update_time", new Date());
+
+        // 执行更新，update方法的第一个参数为null，表示不通过实体对象设置值
+        return this.update(null, updateWrapper);
     }
 
 
@@ -190,6 +193,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         adminOrderDetailDto.setPhone(order.getPhone());
         adminOrderDetailDto.setAddress(order.getReceiverAddress());
         adminOrderDetailDto.setTotalPrice(order.getTotalPrice());
+        adminOrderDetailDto.setStatus(order.getStatus());
 
         List<ProductDto> productDtos = new ArrayList<>();
         for (OrderItem orderItem : orderItems) {

@@ -109,11 +109,6 @@ public class OrderController {
         return Result.success(response);
     }
 
-    @PostMapping("/paid/{orderId}")
-    public Result<Void> orderPaid(@PathVariable Long orderId) {
-        boolean success = orderService.updateStatusAfterPay(orderId);
-        return success ? Result.success() : Result.error("更新失败");
-    }
 
     @PostMapping("/confirm/{orderId}")
     public Result<Void> confirmReceived(@PathVariable Long orderId) {

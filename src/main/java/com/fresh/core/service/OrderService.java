@@ -8,7 +8,9 @@ import com.fresh.miniapp.dto.OrderCreateRequest;
 import com.fresh.miniapp.dto.CartCheckoutRequest;
 import com.fresh.miniapp.dto.PayPrepareResponse;
 import com.fresh.admin.dto.AdminOrderDetailDto;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface OrderService extends IService<Order> {
@@ -54,7 +56,6 @@ public interface OrderService extends IService<Order> {
 
     /**
      * 创建订单
-     * @param request 创建订单请求
      * @return 订单ID
      */
      boolean createOrder(OrderCreateRequest order);
@@ -72,14 +73,11 @@ public interface OrderService extends IService<Order> {
      * @return 支付准备响应
      */
     PayPrepareResponse preparePay(Long orderId);
-    
-    /**
-     * 支付成功后更新订单状态
-     * @param orderId 订单ID
-     * @return 是否成功
-     */
-    boolean updateStatusAfterPay(Long orderId);
-    
+
+
+    @Transactional(rollbackFor = Exception.class)
+    boolean updateStatusAfterPay(String phone, BigDecimal orderNo, Integer status);
+
     /**
      * 管理端根据订单号获取订单详情
      * @param orderNo 订单号

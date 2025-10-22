@@ -6,7 +6,7 @@ import com.fresh.core.service.AdminService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.validation.Valid;
+
 
 /**
  * 管理员控制器

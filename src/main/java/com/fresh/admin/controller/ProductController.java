@@ -12,11 +12,9 @@ import com.fresh.core.service.CategoryService;
 import com.fresh.core.service.ProductService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 管理端商品控制器
@@ -99,7 +97,6 @@ public class ProductController {
         if (request.getId() == null) {
             return Result.error("商品ID不能为空");
         }
-        
         Product product = productService.getById(request.getId());
         if (product == null) {
             return Result.error("商品不存在");

@@ -42,7 +42,6 @@ public class AdminUserController {
         if (request.getId() == null) {
             return Result.error("ID不能为空");
         }
-        
         boolean success = userService.deleteUser(request.getId());
         return success ? Result.success() : Result.error("删除失败");
     }

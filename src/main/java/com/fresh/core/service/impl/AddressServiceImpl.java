@@ -14,17 +14,12 @@ import java.util.List;
 public class AddressServiceImpl extends ServiceImpl<AddressMapper, Address> implements AddressService {
 
     @Override
-    public List<Address> getUserAddresses(Long userId) {
+    public List<Address> getUserAddresses(String phone) {
         LambdaQueryWrapper<Address> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Address::getUserId, userId)
+        wrapper.eq(Address::getReceiverPhone, phone)
                .orderByDesc(Address::getIsDefault)
                .orderByDesc(Address::getUpdateTime);
         return list(wrapper);
-    }
-
-    @Override
-    public Address getAddressDetail(Long id) {
-        return getById(id);
     }
 
     @Override

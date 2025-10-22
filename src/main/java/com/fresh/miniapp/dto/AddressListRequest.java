@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class AddressListRequest {
-    private Long userId;
+    private String phone;
 }

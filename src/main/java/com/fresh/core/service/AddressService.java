@@ -7,8 +7,7 @@ import com.fresh.core.entity.Address;
 import java.util.List;
 
 public interface AddressService extends IService<Address> {
-    List<Address> getUserAddresses(Long userId);
-    Address getAddressDetail(Long id);
+    List<Address> getUserAddresses(String phone);
     boolean addAddress(Address address);
     boolean updateAddress(Address address);
     boolean deleteAddress(Long id);

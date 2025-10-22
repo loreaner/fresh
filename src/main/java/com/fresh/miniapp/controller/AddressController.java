@@ -30,24 +30,12 @@ public class AddressController {
      */
     @PostMapping("/list")
     public Result<List<Address>> getAddressList(@RequestBody AddressListRequest request) {
-        List<Address> addresses = addressService.getUserAddresses(request.getUserId());
+        List<Address> addresses = addressService.getUserAddresses(request.getPhone());
 
         return Result.success(addresses);
     }
 
-    /**
-     * 获取地址详情
-     */
-    @PostMapping("/detail")
-    public Result getAddressDetail(@RequestBody AddressDetailRequest request) {
-        Address address = addressService.getAddressDetail(request.getId());
-        if (address == null) {
-            return Result.error("地址不存在");
-        }
-        
 
-        return Result.success(address);
-    }
 
     /**
      * 添加地址
